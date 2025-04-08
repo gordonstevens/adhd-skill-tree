@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en"> <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADHD Skill Tree - Explanations</title>
+  <style>
+    :root {
+      /* Default Dark Theme Colors */
+      --c-bg: #1a1a1a;
+      --c-text: #ccc;
+      --c-heading: #e0e0e0;
+      --c-link: #60a5fa;
+      --c-code-bg: #2a2a2a;
+      --c-border: #555;
+      --c-button-bg: #444;
+      --c-button-text: #eee;
+      --c-button-border: #888;
+      --c-error-bg: #400; /* Added for consistency */
+      --c-error-text: #ff6666; /* Added for consistency */
+    }
+
+    html[data-theme='alt'] {
+      --c-bg: #1f2a38;
+      --c-text: #cbd5e1;
+      --c-heading: #e5e7eb;
+      --c-link: #93c5fd; /* Lighter blue link for this theme */
+      --c-code-bg: #374151;
+      --c-border: #4b5563;
+      --c-button-bg: #4b5563;
+      --c-button-text: #e5e7eb;
+      --c-button-border: #9ca3af;
+      --c-error-bg: #500;
+      --c-error-text: #ffcccc;
+    }
+
+    /* OS Preference Handling (Fallback if JS fails or data-theme not set) */
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme]) {
+        --c-bg: #1f2a38; /* Default to 'alt' theme if OS is light */
+        --c-text: #cbd5e1;
+        --c-heading: #e5e7eb;
+        --c-link: #93c5fd;
+        --c-code-bg: #374151;
+        --c-border: #4b5563;
+        --c-button-bg: #4b5563;
+        --c-button-text: #e5e7eb;
+        --c-button-border: #9ca3af;
+        --c-error-bg: #500;
+        --c-error-text: #ffcccc;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+       :root:not([data-theme]) {
+        /* Dark theme variables already defined in :root */
+       }
+    }
+
+    body {
+      margin: 0 auto;
+      padding: 20px 40px 80px 40px; /* Added bottom padding */
+      max-width: 800px;
+      background-color: var(--c-bg);
+      color: var(--c-text);
+      font-family: 'Jost', sans-serif;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    h1, h2, h3, h4 {
+      color: var(--c-heading);
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      border-bottom: 1px solid var(--c-border);
+      padding-bottom: 0.2em;
+    }
+    h1 { font-size: 2.2em; }
+    h2 { font-size: 1.8em; }
+    h3 { font-size: 1.4em; border-bottom: none; margin-top: 1.8em;}
+    h4 { font-size: 1.1em; border-bottom: none; margin-top: 1.2em; color: var(--c-text); font-style: italic;}
+    p {
+      margin-bottom: 1em;
+    }
+    ul {
+      padding-left: 20px;
+      margin-bottom: 1em;
+    }
+    li {
+      margin-bottom: 0.5em;
+    }
+    a {
+      color: var(--c-link);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    code {
+      background-color: var(--c-code-bg);
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      font-family: Consolas, monospace;
+    }
+    /* Style to make anchors targetable slightly below header */
+    h2[id], h3[id], h4[id], li[id] {
+      scroll-margin-top: 20px;
+    }
+    /* Theme Toggle Button Style */
+    #theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 101;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: var(--c-button-bg);
+      color: var(--c-button-text);
+      border: 1px solid var(--c-button-border);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9em;
+    }
+     /* Error message style */
+     #fontError {
+      color: var(--c-error-text); background: var(--c-error-bg);
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%); padding: 8px 15px; border-radius: 5px; z-index: 100; text-align: center; font-family: Jost, sans-serif;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,700;1,400&display=swap">
+</head>
+<body> <h1>ADHD Skill Tree Explanations</h1>
+  <button id="theme-toggle">Toggle Theme</button>
+
+  <section id="introduction">
+    <h2>Introduction</h2>
+    <p>This document provides explanations for the skills, traits, and strategies represented in the ADHD Skill Tree visualization. It aims to help people better understand ADHD and common management approaches.</p>
+    <ul>
+      <li id="active_skills_def"><strong>Active Skills:</strong> These are strategies, techniques, and behaviors that individuals with ADHD consciously learn and apply to manage symptoms, improve executive functions, and navigate daily life challenges. They require deliberate effort, practice, and implementation.</li>
+      <li id="passive_skills_def"><strong>Passive Skills/Strengths:</strong> This could refer to inherent traits, tendencies, or positive characteristics sometimes associated with ADHD that don't necessarily need to be learned in the same way as active skills, but can be recognized, understood, and leveraged. It could also refer to environmental setups or external supports that help manage ADHD without constant active effort from the individual once established.</li>
+    </ul>
+  </section>
+
+  <section id="active_skills_section">
+    <h2>Active Skills (Strategies to Learn & Practice)</h2>
+    <p>These often target executive function challenges common in ADHD:</p>
+
+    <h3 id="section_planning_org">Organization & Planning</h3>
+    <ul>
+      <li id="time_mgmt"><strong>Time Management:</strong> Using timers (like the Pomodoro technique), time blocking, estimating task duration more accurately.</li>
+      <li id="prioritization"><strong>Prioritization:</strong> Learning to identify urgent vs. important tasks (e.g., using Eisenhower Matrix).</li>
+      <li id="task_initiation"><strong>Task Initiation:</strong> Breaking large tasks into smaller, manageable steps and using strategies (e.g., 5-minute rule) to overcome inertia and start tasks.</li>
+      <li id="planning_sequencing"><strong>Planning & Sequencing:</strong> Creating outlines, using checklists, planning steps needed to reach a goal.</li>
+      <li id="planning_tools"><strong>Using Planners/Calendars:</strong> Consistently using digital or physical tools to track appointments, deadlines, and tasks.</li>
+      <li id="routines"><strong>Developing Routines:</strong> Establishing consistent morning, evening, work, or study routines to reduce decision fatigue and automate sequences.</li>
+      <li id="physical_org"><strong>Physical Organization:</strong> Creating systems for managing belongings, paperwork (e.g., "a place for everything," designated zones).</li>
+       <li id="digital_org"><strong>Digital Organization:</strong> Creating systems for managing digital files (consistent naming, folder structures) and emails (filters, scheduled checking).</li>
+       <li id="task_breakdown"><strong>Task Breakdown:</strong> Specifically focusing on dividing large, overwhelming projects into the smallest possible next action. Often a prerequisite for initiation and planning.</li>
+       <li id="time_blocking_skill"><strong>Time Blocking (Skill):</strong> The active practice of allocating specific time blocks in a calendar or schedule for specific tasks or types of work.</li>
+    </ul>
+
+    <h3 id="section_focus_attn">Focus & Attention Management</h3>
+    <ul>
+      <li id="minimize_distractions"><strong>Minimizing Distractions:</strong> Actively identifying personal distractors (notifications, clutter, noise) and creating strategies to reduce their impact (e.g., using blockers, headphones, tidying workspace before starting).</li>
+      <li id="sustained_attention"><strong>Sustained Attention Techniques:</strong> Practicing focusing for intentionally set periods, potentially using timers or structured methods like Pomodoro.</li>
+      <li id="fidget_tools"><strong>Using Fidget Tools:</strong> Selecting and using appropriate fidget tools (quiet, non-distracting to others) consciously to help maintain focus during passive listening or concentration tasks.</li>
+      <li id="mindfulness_focus"><strong>Mindfulness & Grounding:</strong> Employing brief mindfulness exercises (like focusing on breath or senses) or grounding techniques to bring attention back to the present moment when the mind wanders or feels overwhelmed.</li>
+      <li id="task_switching"><strong>Task Switching Strategy:</strong> Developing deliberate strategies to transition between tasks more smoothly, such as planning transitions, using buffer activities, or setting clear start/end points.</li>
+      <li id="pomodoro"><strong>Pomodoro Technique:</strong> A specific time management method involving focused work intervals (typically 25 minutes) separated by short breaks, designed to improve sustained attention.</li>
+    </ul>
+
+    <h3 id="section_emo_reg">Emotional Regulation & Impulse Control</h3>
+    <ul>
+      <li id="recognize_triggers"><strong>Recognizing Emotional Triggers:</strong> Actively identifying specific situations, thoughts, or physiological feelings that reliably precede emotional overwhelm, reactivity, or impulsive actions.</li>
+      <li id="develop_coping"><strong>Developing Coping Strategies:</strong> Learning and practicing a menu of techniques for managing frustration, anger, anxiety, or disappointment when they arise (e.g., deep breathing, taking breaks, physical activity, reframing thoughts).</li>
+      <li id="pause_before_acting"><strong>Pause Before Acting/Speaking:</strong> Consciously practicing techniques (like counting, taking a breath, using a prepared phrase) to create space between an impulse (to act or speak) and the actual action.</li>
+      <li id="stress_mgmt_activity"><strong>Stress Management Implementation:</strong> Actively incorporating regular, planned stress-reducing activities into one's schedule (e.g., exercise, hobbies, relaxation practices, spending time in nature).</li>
+      <li id="self_compassion_practice"><strong>Self-Compassion Practice:</strong> Actively learning and applying techniques of self-kindness, recognizing common humanity, and mindfulness when mistakes happen or ADHD symptoms interfere.</li>
+      <li id="express_needs"><strong>Express Needs Constructively:</strong> Developing and practicing communication skills to articulate feelings and needs clearly and respectfully, especially during emotionally charged situations.</li>
+    </ul>
+
+    <h3 id="section_working_mem">Working Memory & Information Processing</h3>
+    <ul>
+      <li id="note_taking"><strong>Note-Taking Strategies:</strong> Developing and using effective, personalized methods to capture and organize information during lectures, meetings, or reading (e.g., mind maps, Cornell notes, bullet points, recording + summarizing).</li>
+      <li id="external_aids"><strong>Using External Aids:</strong> Deliberately setting up and consistently relying on external systems like reminders, alarms, calendars, detailed lists, and prominent visual cues to compensate for working memory limitations.</li>
+      <li id="repeat_paraphrase"><strong>Repeating/Paraphrasing Information:</strong> Actively using techniques like repeating information back immediately (aloud or silently) or paraphrasing concepts in one's own words to aid encoding and retention.</li>
+    </ul>
+
+    <h3 id="section_social_comm">Social & Communication</h3>
+    <ul>
+      <li id="active_listening"><strong>Active Listening:</strong> Consciously practicing techniques like maintaining eye contact (if comfortable), nodding, asking clarifying questions, summarizing the speaker's points, and actively inhibiting the urge to interrupt.</li>
+      <li id="read_social_cues"><strong>Reading Social Cues:</strong> Deliberately paying closer attention to non-verbal communication (body language, facial expressions, tone of voice) and context to better understand social situations.</li>
+      <li id="manage_speech"><strong>Managing Impulsive Speech:</strong> Actively practicing strategies like pausing before speaking, considering the audience and context, and sometimes rehearsing key points, especially in sensitive situations.</li>
+    </ul>
+
+     <h3 id="section_self_mgmt">Self-Management & Advocacy</h3>
+     <ul>
+      <li id="understand_adhd"><strong>Understanding ADHD:</strong> Actively learning about one's specific profile of symptoms, challenges, strengths, and how ADHD impacts daily life.</li>
+      <li id="self_monitoring"><strong>Self-Monitoring:</strong> Regularly and consciously paying attention to one's own energy levels, focus, emotional state, and task progress to make proactive adjustments and implement strategies as needed.</li>
+      <li id="problem_solving"><strong>Problem-Solving Approach:</strong> Developing and utilizing a systematic approach (e.g., define problem, brainstorm solutions, evaluate, implement, review) to tackle challenges rather than reacting impulsively or avoiding them.</li>
+      <li id="self_advocacy"><strong>Self-Advocacy:</strong> Learning how to clearly and appropriately articulate one's needs related to ADHD and asking for reasonable accommodations or support at school, work, or in relationships.</li>
+      <li id="setting_boundaries"><strong>Setting Boundaries:</strong> Actively practicing identifying personal limits regarding time, energy, and commitments, and communicating these limits by saying "no" when necessary.</li>
+     </ul>
+  </section>
+
+  <section id="passive_strengths_section">
+    <h2>Potential Passive Strengths/Traits (Characteristics to Recognize & Leverage)</h2>
+    <p>These are traits sometimes associated with ADHD. They aren't universal and can manifest differently. They often need active skills (above) to be channeled productively.</p>
+    <ul>
+      <li id="creativity"><strong>Creativity & Innovative Thinking:</strong> A tendency towards seeing connections others miss, "out-of-the-box" problem-solving, and generating novel ideas.</li>
+      <li id="hyperfocus_channel"><strong>Hyperfocus:</strong> The capacity for intense concentration on subjects of strong interest. Requires active skills to direct productively and manage transitions out of it.</li>
+      <li id="high_energy"><strong>High Energy & Drive:</strong> Natural enthusiasm and ability to work intensely, particularly when engaged or passionate. Requires management to avoid burnout.</li>
+      <li id="resilience"><strong>Resilience:</strong> An often-developed ability to bounce back from setbacks and adapt to adversity, partly learned through navigating life's challenges.</li>
+      <li id="adaptability"><strong>Spontaneity & Adaptability:</strong> A tendency towards quick thinking and comfort with shifting gears or changing plans.</li>
+      <li id="empathy"><strong>Empathy & Sensitivity:</strong> Often includes a deep attunement to the emotions and experiences of others.</li>
+      <li id="curiosity"><strong>Curiosity:</strong> A strong intrinsic desire to learn, explore new things, and understand how things work.</li>
+      <li id="crisis_problem_solving"><strong>Problem-Solving in Crisis:</strong> An ability some experience where high-stakes, urgent situations can trigger surprising calm, clarity, and decisiveness.</li>
+      <li id="humor"><strong>Sense of Humor:</strong> An ability to find humor in situations, sometimes used as a coping mechanism or social tool.</li>
+      <li id="divergent_thinking"><strong>Divergent Thinking:</strong> The ability to easily generate many diverse ideas from a single starting point.</li>
+      <li id="nonlinear_thinking"><strong>Non-Linear & Associative Thinking:</strong> A thinking style that readily jumps between topics and connects seemingly unrelated concepts.</li>
+      <li id="novelty_seeking"><strong>Novelty Seeking:</strong> A drive towards new experiences, information, and stimuli which fuels curiosity.</li>
+      <li id="risk_taking"><strong>Risk-Taking (Creative/Decisive):</strong> A potentially lower inhibition threshold that can lead to trying unconventional approaches or making faster decisions (needs active management).</li>
+      <li id="daydreaming"><strong>Daydreaming/Mind-Wandering:</strong> The tendency for the mind to drift can sometimes lead to unexpected insights or creative incubation when not interfering with necessary focus.</li>
+      <li id="emotional_intensity"><strong>Emotional Intensity (Creative):</strong> Experiencing emotions deeply can provide rich material and drive for expressive pursuits.</li>
+    </ul>
+    <p><strong>Important Context for Strengths:</strong> Not universal. Needs channeling with active skills. Environment matters.</p>
+     <p><strong>Active Skills related to leveraging strengths:</strong></p>
+     <ul>
+      <li id="leverage_creativity"><strong>Leverage Creativity:</strong> Actively applying creative thinking skills to solve problems or approach tasks in novel ways.</li>
+      <li id="direct_hyperfocus"><strong>Direct Hyperfocus:</strong> Using active strategies like setting clear goals, timers, minimizing startup friction, and planning transitions to channel hyperfocus productively.</li>
+     </ul>
+  </section>
+
+  <section id="env_supports">
+    <h3 id="environmental_supports">Environmental Supports (Setups that help passively once established)</h3>
+    <p>These aren't inherent skills or traits, but external factors or systems, once set up (which takes active effort initially), provide ongoing passive support for managing ADHD symptoms.</p>
+    <ul>
+      <li id="structured_env"><strong>Structured Environments:</strong> Creating and maintaining predictable routines and highly organized physical and digital spaces to reduce cognitive load.</li>
+      <li id="visual_aids_env"><strong>Visual Aids:</strong> Using timers, checklists, whiteboards, calendars, and other visual prompts placed strategically in the environment.</li>
+      <li id="reminders_alarms"><strong>Reminders & Alarms:</strong> Setting up automated digital or physical prompts for tasks, appointments, transitions, or medication.</li>
+      <li id="accountability_partners"><strong>Accountability Partners:</strong> Arranging regular check-ins with another person (friend, coach, colleague) to maintain momentum on goals or tasks.</li>
+      <li id="body_doubling"><strong>Body Doubling:</strong> The practice of working alongside someone else (physically present or virtually connected, often silently) to improve focus and task initiation/persistence.</li>
+      <li id="noise_tools_env"><strong>Noise Management Tools:</strong> Having tools like earplugs, white noise machines, or noise-canceling headphones readily available and using them to manage auditory sensitivity or distractions.</li>
+    </ul>
+  </section>
+
+   <section id="final_notes">
+    <h2>Final Notes</h2>
+    <p>It's crucial to remember that ADHD presents differently in everyone. Developing active skills often requires significant effort and practice, sometimes with the help of therapists, coaches, or educational programs (like CBT or DBT adapted for ADHD). Recognizing and leveraging strengths, while valuable, also requires self-awareness and strategy.</p>
+    <p>This visualization and explanation aim to provide an overview of common strategies and traits, not a diagnostic or treatment tool. Consult with qualified professionals for personalized advice.</p>
+  </section>
+
+  <script>
+    function getThemePreference() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) return savedTheme;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'alt'; // Map OS Light -> Alt
+      return 'dark';
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'alt' || theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('theme');
+      }
+    }
+
+     function handleThemeToggleClick() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || getThemePreference();
+      const newTheme = currentTheme === 'dark' ? 'alt' : 'dark';
+      applyTheme(newTheme);
+      // No complex visual update needed here, CSS handles it.
+    }
+
+    // Apply theme on initial load
+    applyTheme(getThemePreference());
+
+    // Add listener after DOM is loaded
+    document.addEventListener('DOMContentLoaded', (event) => {
+       const themeToggleButton = document.getElementById('theme-toggle');
+       if(themeToggleButton){
+           themeToggleButton.addEventListener('click', handleThemeToggleClick);
+       }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en"> 
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADHD Skill Tree</title>
+  <style>
+    :root {
+      /* Default Dark Theme Colors */
+      --c-bg: #1a1a1a;
+      --c-text: #ccc;
+      --c-title: #e0e0e0;
+      --c-subtitle: #a0a0a0;
+      --c-tooltip-bg: rgba(10, 10, 10, 0.92);
+      --c-tooltip-border: #888;
+      --c-tooltip-text: #eee;
+      --c-tooltip-heading: #fff;
+      --c-tooltip-separator: #555;
+      --c-section-title: #e0e0e0;
+      --c-section-title-shadow: rgba(0, 0, 0, 0.8);
+      --c-line: #666666;
+      --c-button-bg: #444;
+      --c-button-text: #eee;
+      --c-button-border: #888;
+      --c-skill-bg: #4a4a4a;
+      --c-skill-bg-hover: #707070;
+      --c-skill-icon-active: #32CD32;
+      --c-skill-icon-passive: #8A2BE2;
+      --c-skill-icon-hover: #ffffff;
+      --c-error-bg: #400;
+      --c-error-text: #ff6666;
+    }
+
+    /* Renamed to 'alt' and using a "Colourful Dark" palette */
+    html[data-theme='alt'] {
+      --c-bg: #1f2a38;
+      --c-text: #cbd5e1;
+      --c-title: #e5e7eb;
+      --c-subtitle: #9ca3af;
+      --c-tooltip-bg: rgba(31, 41, 55, 0.95);
+      --c-tooltip-border: #6b7280;
+      --c-tooltip-text: #e5e7eb;
+      --c-tooltip-heading: #f0f0f0;
+      --c-tooltip-separator: #4b5563;
+      --c-section-title: #e5e7eb;
+      --c-section-title-shadow: rgba(0, 0, 0, 0.6);
+      --c-line: #6b7280;
+      --c-button-bg: #4b5563;
+      --c-button-text: #e5e7eb;
+      --c-button-border: #9ca3af;
+      --c-skill-bg: #374151;
+      --c-skill-bg-hover: #4b5563;
+      --c-skill-icon-active: #4ade80;
+      --c-skill-icon-passive: #a78bfa;
+      --c-skill-icon-hover: #ffffff;
+      --c-error-bg: #500;
+      --c-error-text: #ffcccc;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: var(--c-bg);
+      color: var(--c-text);
+      font-family: 'Jost', sans-serif;
+    }
+    #container {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      position: relative;
+      cursor: grab;
+    }
+    #container:active {
+      cursor: grabbing;
+    }
+    #main-title {
+      position: absolute;
+      top: 50%;
+      left: 30px;
+      transform-origin: left center;
+      transform: translateY(-50%) rotate(-90deg);
+      color: var(--c-title);
+      font-size: 2.0em;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px var(--c-section-title-shadow);
+      z-index: 20;
+      pointer-events: none;
+      white-space: nowrap;
+      letter-spacing: 2px;
+    }
+    #subtitle {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--c-subtitle);
+      font-size: 0.9em;
+      font-weight: 400;
+      z-index: 20;
+      pointer-events: none;
+      text-align: center;
+      width: 100%;
+    }
+    #tooltip {
+      position: absolute; display: none; padding: 12px;
+      background-color: var(--c-tooltip-bg);
+      border: 1px solid var(--c-tooltip-border);
+      color: var(--c-tooltip-text);
+      pointer-events: none; z-index: 100; border-radius: 5px; font-size: 1em; max-width: 280px; font-family: 'Jost', sans-serif; line-height: 1.4;
+    }
+    #tooltip h3 {
+      margin: 0 0 8px 0;
+      color: var(--c-tooltip-heading);
+      font-size: 1.1em; font-weight: 700;
+      border-bottom: 1px solid var(--c-tooltip-separator);
+      padding-bottom: 5px;
+    }
+    #tooltip p { margin: 5px 0; font-size: 0.95em; }
+    #tooltip .skill-type { font-style: italic; font-size: 0.9em; margin-bottom: 8px; font-weight: 400; }
+    .section-title {
+      position: absolute; top: 0; left: 0;
+      color: var(--c-section-title);
+      font-size: 1.6em; font-weight: 700;
+      text-shadow: 1px 1px 3px var(--c-section-title-shadow);
+      pointer-events: none; z-index: 10; white-space: nowrap; transform-origin: center center;
+    }
+    .fa-solid { font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    #fontError {
+      color: var(--c-error-text); background: var(--c-error-bg);
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%); padding: 8px 15px; border-radius: 5px; z-index: 100; text-align: center; font-family: Jost, sans-serif;
+    }
+    #theme-toggle {
+      position: fixed; bottom: 20px; right: 20px; z-index: 101; padding: 8px 12px; cursor: pointer; border-radius: 5px;
+      background-color: var(--c-button-bg);
+      color: var(--c-button-text);
+      border: 1px solid var(--c-button-border);
+      font-family: 'Jost', sans-serif; font-size: 0.9em;
+    }
+
+    @media screen and (min-width: 769px) {
+      #tooltip { font-size: 1.1em; max-width: 320px; }
+      #tooltip h3 { font-size: 1.2em; }
+      #tooltip p { font-size: 1.0em; }
+      #tooltip .skill-type { font-size: 0.95em; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body data-theme="dark"> <h1 id="main-title">ADHD Skill Tree</h1>
+  <p id="subtitle">Click/Drag to Pan | Scroll/Pinch to Zoom</p>
+  <button id="theme-toggle">Toggle Theme</button>
+
+  <div id="container">
+    </div>
+  <div id="tooltip"></div>
+
+  <script type="importmap">
+    {
+      "imports": {
+          "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // --- Configuration ---
+    const SKILL_SIZE = 55;
+    const ICON_TEXTURE_SIZE = 128;
+    const GRID_SPACING_X = 120;
+    const VERTICAL_SPACING_WITHIN_SECTION = 95;
+    const GRID_SPACING_Y_SECTION = 280;
+    const GRID_SPACING_Y_TITLE_OFFSET = 90;
+    const BASE_FRUSTUM_SIZE = 1200;
+    const CAMERA_DISTANCE = 600;
+
+    // --- Theme Independent Colors ---
+    let ICON_COLOR_HOVER_STR = '#ffffff'; // Will be updated from CSS
+
+    // --- Section Layout ---
+    const sectionOrder = ['Planning & Organization', 'Focus & Attention', 'Emotional Regulation', 'Working Memory & Interaction', 'Leveraging Strengths'];
+    const sectionLayout = {};
+    sectionOrder.forEach((name, index) => {
+      sectionLayout[name] = {
+        title: name.toUpperCase(),
+        baseY: (sectionOrder.length / 2 - index - 0.5) * GRID_SPACING_Y_SECTION
+      };
+    });
+
+    // --- Skill Data (Links updated, section comments added) ---
+    const skillsData = [
+      // --- Section: Planning & Organization ---
+      { id: 'task_breakdown', name: 'Task Breakdown', description: 'Break large tasks into smaller, manageable steps.', pos: { x: -2.5, y: 0 }, section: 'Planning & Organization', type: 'active', iconUnicode: '\uf542', link: 'adhd-skill-tree-explanation.htm#task_initiation' }, // Note: Markdown used task_initiation text for this concept initially. Mapping to task_initiation anchor.
+      { id: 'prioritization', name: 'Prioritization', description: 'Identify urgent vs. important tasks (e.g., Eisenhower Matrix).', pos: { x: -1.5, y: 0 }, section: 'Planning & Organization', type: 'active', iconUnicode: '\uf0cb', connections: ['task_breakdown'], link: 'adhd-skill-tree-explanation.htm#prioritization' },
+      { id: 'planning_tools', name: 'Use Planners', description: 'Consistently use digital or physical tools for tasks/deadlines.', pos: { x: -0.5, y: 0 }, section: 'Planning & Organization', type: 'active', iconUnicode: '\uf073', link: 'adhd-skill-tree-explanation.htm#planning_tools' },
+      { id: 'time_blocking', name: 'Time Blocking', description: 'Allocate specific time blocks for specific tasks.', pos: { x: 0.5, y: 0 }, section: 'Planning & Organization', type: 'active', iconUnicode: '\uf784', connections: ['planning_tools'], link: 'adhd-skill-tree-explanation.htm#time_mgmt' }, // Maps to broader time management
+      { id: 'task_initiation', name: 'Task Initiation', description: 'Use strategies (e.g., 5-minute rule) to start tasks.', pos: { x: -2, y: -1 }, section: 'Planning & Organization', type: 'active', iconUnicode: '\uf135', connections: ['task_breakdown', 'prioritization'], link: 'adhd-skill-tree-explanation.htm#task_initiation' },
+      { id: 'routines', name: 'Develop Routines', description: 'Establish consistent morning, evening, or work routines.', pos: { x: -0.5, y: -1 }, section: 'Planning & Organization', type: 'active', iconUnicode: '\uf72e', connections: ['planning_tools'], link: 'adhd-skill-tree-explanation.htm#routines' },
+      { id: 'physical_org', name: 'Physical Organization', description: 'Create systems for managing belongings and paperwork.', pos: { x: 1.5, y: 0 }, section: 'Planning & Organization', type: 'passive', iconUnicode: '\uf1b3', link: 'adhd-skill-tree-explanation.htm#physical_org' },
+      { id: 'digital_org', name: 'Digital Organization', description: 'Create systems for managing digital files and emails.', pos: { x: 2.5, y: 0 }, section: 'Planning & Organization', type: 'passive', iconUnicode: '\uf1c0', connections: ['physical_org'], link: 'adhd-skill-tree-explanation.htm#physical_org' }, // Shares anchor with physical org
+      { id: 'visual_aids', name: 'Visual Aids', description: 'Use calendars, whiteboards for reminders.', pos: { x: 1.5, y: -1 }, section: 'Planning & Organization', type: 'passive', iconUnicode: '\uf073', connections: ['physical_org'], link: 'adhd-skill-tree-explanation.htm#visual_aids_env' }, // Link to env support section
+
+      // --- Section: Focus & Attention ---
+      { id: 'minimize_distractions', name: 'Minimize Distractions', description: 'Identify and reduce environmental distractors.', pos: { x: -1.5, y: 0 }, section: 'Focus & Attention', type: 'active', iconUnicode: '\uf6be', link: 'adhd-skill-tree-explanation.htm#minimize_distractions' },
+      { id: 'pomodoro', name: 'Pomodoro Technique', description: 'Work in focused bursts with short breaks.', pos: { x: -0.5, y: 0 }, section: 'Focus & Attention', type: 'active', iconUnicode: '\uf252', link: 'adhd-skill-tree-explanation.htm#time_mgmt' }, // Relates to time management
+      { id: 'mindfulness_focus', name: 'Mindfulness for Focus', description: 'Practice bringing attention back to the present.', pos: { x: 0.5, y: 0 }, section: 'Focus & Attention', type: 'active', iconUnicode: '\uf13d', link: 'adhd-skill-tree-explanation.htm#mindfulness_focus' },
+      { id: 'structured_env', name: 'Structured Environment', description: 'Maintain clear routines and organized spaces.', pos: { x: 1.5, y: 0 }, section: 'Focus & Attention', type: 'passive', iconUnicode: '\uf66f', link: 'adhd-skill-tree-explanation.htm#structured_env' },
+      { id: 'fidget_tools', name: 'Use Fidget Tools', description: 'Use fidget tools appropriately to aid concentration.', pos: { x: -1, y: -1 }, section: 'Focus & Attention', type: 'active', iconUnicode: '\uf554', connections: ['pomodoro'], link: 'adhd-skill-tree-explanation.htm#sustained_attention' }, // Relates to sustained attention
+      { id: 'body_doubling', name: 'Body Doubling', description: 'Work alongside someone to improve focus.', pos: { x: 1.5, y: -1 }, section: 'Focus & Attention', type: 'passive', iconUnicode: '\uf0c0', connections: ['structured_env'], link: 'adhd-skill-tree-explanation.htm#body_doubling' },
+      { id: 'noise_tools', name: 'Noise Management Tools', description: 'Use earplugs, white noise, or headphones.', pos: { x: -2, y: -1 }, section: 'Focus & Attention', type: 'passive', iconUnicode: '\uf001', connections: ['minimize_distractions'], link: 'adhd-skill-tree-explanation.htm#noise_tools_env' },
+
+      // --- Section: Emotional Regulation ---
+      { id: 'recognize_triggers', name: 'Recognize Triggers', description: 'Identify situations/feelings leading to overwhelm.', pos: { x: -1.5, y: 0 }, section: 'Emotional Regulation', type: 'active', iconUnicode: '\uf06e', link: 'adhd-skill-tree-explanation.htm#recognize_triggers' },
+      { id: 'develop_coping', name: 'Develop Coping Strategies', description: 'Learn techniques for managing difficult emotions.', pos: { x: -0.5, y: 0 }, section: 'Emotional Regulation', type: 'active', iconUnicode: '\uf6ec', connections: ['recognize_triggers'], link: 'adhd-skill-tree-explanation.htm#develop_coping' },
+      { id: 'pause_before_acting', name: 'Pause Before Acting', description: 'Practice creating space between impulse and action.', pos: { x: 0.5, y: 0 }, section: 'Emotional Regulation', type: 'active', iconUnicode: '\uf28b', connections: ['develop_coping'], link: 'adhd-skill-tree-explanation.htm#pause_before_acting' },
+      { id: 'stress_mgmt_activity', name: 'Stress Management Hobby', description: 'Incorporate regular stress-reducing activities.', pos: { x: 1.5, y: 0 }, section: 'Emotional Regulation', type: 'passive', iconUnicode: '\uf1fc', link: 'adhd-skill-tree-explanation.htm#stress_mgmt_activity' },
+      { id: 'self_compassion_practice', name: 'Self-Compassion Practice', description: 'Practice kindness towards oneself during difficulties.', pos: { x: 0, y: -1 }, section: 'Emotional Regulation', type: 'active', iconUnicode: '\uf004', connections: ['pause_before_acting', 'develop_coping'], link: 'adhd-skill-tree-explanation.htm#self_compassion_practice' },
+      { id: 'express_needs', name: 'Express Needs', description: 'Communicate feelings and needs constructively.', pos: { x: 0.5, y: -1 }, section: 'Emotional Regulation', type: 'active', iconUnicode: '\uf4ad', connections: ['self_compassion_practice'], link: 'adhd-skill-tree-explanation.htm#express_needs' },
+
+      // --- Section: Working Memory & Interaction ---
+      { id: 'note_taking', name: 'Note-Taking Strategies', description: 'Develop effective ways to capture information (mind maps, etc.).', pos: { x: -2, y: 0 }, section: 'Working Memory & Interaction', type: 'active', iconUnicode: '\uf044', link: 'adhd-skill-tree-explanation.htm#note_taking' },
+      { id: 'external_aids', name: 'Use External Aids', description: 'Rely on reminders, alarms, lists, visual cues.', pos: { x: -1, y: 0 }, section: 'Working Memory & Interaction', type: 'active', iconUnicode: '\uf0f3', connections: ['note_taking'], link: 'adhd-skill-tree-explanation.htm#external_aids' },
+      { id: 'active_listening', name: 'Active Listening', description: 'Practice focusing on the speaker, reducing interruptions.', pos: { x: 0, y: 0 }, section: 'Working Memory & Interaction', type: 'active', iconUnicode: '\uf2a1', link: 'adhd-skill-tree-explanation.htm#active_listening' },
+      { id: 'manage_speech', name: 'Manage Impulsive Speech', description: 'Practice thinking before speaking.', pos: { x: 1, y: 0 }, section: 'Working Memory & Interaction', type: 'active', iconUnicode: '\uf4ad', connections: ['active_listening'], link: 'adhd-skill-tree-explanation.htm#manage_speech' },
+      { id: 'repeat_paraphrase', name: 'Repeat & Paraphrase', description: 'Techniques to help encode information heard or read.', pos: { x: -1.5, y: -1 }, section: 'Working Memory & Interaction', type: 'active', iconUnicode: '\uf01e', connections: ['external_aids', 'note_taking'], link: 'adhd-skill-tree-explanation.htm#repeat_paraphrase' },
+      { id: 'read_social_cues', name: 'Read Social Cues', description: 'Pay closer attention to non-verbal communication.', pos: { x: 0.5, y: -1 }, section: 'Working Memory & Interaction', type: 'active', iconUnicode: '\uf06e', connections: ['active_listening', 'manage_speech'], link: 'adhd-skill-tree-explanation.htm#read_social_cues' },
+
+      // --- Section: Leveraging Strengths ---
+      // *** SPECIAL LINK for Creativity ***
+      { id: 'creativity', name: 'Creativity', description: 'Leverage innovative thinking and unique perspectives.', pos: { x: -2, y: 0 }, section: 'Leveraging Strengths', type: 'passive', iconUnicode: '\uf0eb', link: 'https://www.google.ca/' },
+      { id: 'hyperfocus_channel', name: 'Channel Hyperfocus', description: 'Direct intense focus towards passions or important tasks.', pos: { x: -1, y: 0 }, section: 'Leveraging Strengths', type: 'passive', iconUnicode: '\uf7d9', link: 'adhd-skill-tree-explanation.htm#hyperfocus_channel' },
+      { id: 'high_energy', name: 'High Energy', description: 'Utilize enthusiasm and drive for engaging projects.', pos: { x: 0, y: 0 }, section: 'Leveraging Strengths', type: 'passive', iconUnicode: '\uf0e7', link: 'adhd-skill-tree-explanation.htm#high_energy' },
+      { id: 'resilience', name: 'Resilience', description: 'Draw upon the ability to bounce back from setbacks.', pos: { x: 1, y: 0 }, section: 'Leveraging Strengths', type: 'passive', iconUnicode: '\uf132', link: 'adhd-skill-tree-explanation.htm#resilience' },
+      { id: 'adaptability', name: 'Adaptability', description: 'Utilize quick thinking and flexibility in changing situations.', pos: { x: 2, y: 0 }, section: 'Leveraging Strengths', type: 'passive', iconUnicode: '\uf53f', link: 'adhd-skill-tree-explanation.htm#adaptability' },
+      { id: 'leverage_creativity', name: 'Leverage Creativity', description: 'Apply creative problem-solving to challenges.', pos: { x: -2, y: -1 }, section: 'Leveraging Strengths', type: 'active', iconUnicode: '\uf1fc', connections: ['creativity'], link: 'adhd-skill-tree-explanation.htm#leverage_creativity' },
+      { id: 'direct_hyperfocus', name: 'Direct Hyperfocus', description: 'Use timers or goals to guide hyperfocus sessions.', pos: { x: -1, y: -1 }, section: 'Leveraging Strengths', type: 'active', iconUnicode: '\uf140', connections: ['hyperfocus_channel'], link: 'adhd-skill-tree-explanation.htm#direct_hyperfocus' }
+    ];
+
+    // --- Global Variables ---
+    let scene, camera, renderer, raycaster, mouse;
+    let controls;
+    const skillObjects = new Map();
+    let tooltipElement = null;
+    let containerElement = null;
+    let themeToggleButton = null;
+    let fontAwesomeLoaded = false;
+    let googleFontLoaded = false;
+    const sectionTitleElements = {};
+    let previouslyHoveredGroup = null;
+    let lineObjects = [];
+    let lineMaterial = null;
+
+    // --- JS Theme Color Variables ---
+    let currentBgColor = new THREE.Color(0x1a1a1a);
+    let currentLineColor = new THREE.Color(0x666666);
+    let currentIconColorActiveStr = '#32CD32';
+    let currentIconColorPassiveStr = '#8A2BE2';
+    let currentIconColorHoverStr = '#ffffff';
+    let currentSkillBgHex = 0x4a4a4a;
+    let currentBgHoverHex = 0x707070;
+
+    // --- Skill Data Validation Function ---
+    function validateSkillsData(skills, availableSections) {
+      let isValid = true; const encounteredIds = new Set(); const validSectionNames = new Set(Object.keys(availableSections));
+      skills.forEach((skill, index) => { const skillId = skill ? skill.id : `at index ${index}`; if (!skill) { console.error(`Validation Error: Skill object at index ${index} is null or undefined.`); isValid = false; return; } const requiredProps = ['id', 'name', 'section', 'type', 'pos', 'iconUnicode', 'link']; for (const prop of requiredProps) { if (skill[prop] === undefined || skill[prop] === null) { console.error(`Validation Error: Skill "${skillId}" is missing required property '${prop}'.`); isValid = false; } } if (!skill.id) { console.error(`Validation Error: Skill at index ${index} is missing an ID.`); isValid = false; } else if (typeof skill.id !== 'string' || skill.id.trim() === '') { console.error(`Validation Error: Skill at index ${index} has an invalid ID "${skill.id}".`); isValid = false; } else { if (encounteredIds.has(skill.id)) { console.error(`Validation Error: Duplicate skill ID found: "${skill.id}".`); isValid = false; } encounteredIds.add(skill.id); } if (skill.pos && (typeof skill.pos.x !== 'number' || typeof skill.pos.y !== 'number')) { console.error(`Validation Error: Skill "${skillId}" has invalid 'pos' property (x/y must be numbers).`); isValid = false; } else if (!skill.pos) { console.error(`Validation Error: Skill "${skillId}" is missing 'pos' property.`); isValid = false; } if (skill.section && !validSectionNames.has(skill.section)) { console.error(`Validation Error: Skill "${skillId}" references invalid section "${skill.section}". Valid sections: [${Array.from(validSectionNames).join(', ')}].`); isValid = false; } else if (!skill.section) { console.error(`Validation Error: Skill "${skillId}" is missing 'section' property.`); isValid = false; } if (skill.type && !['active', 'passive'].includes(skill.type)) { console.warn(`Validation Warning: Skill "${skillId}" has unconventional type "${skill.type}".`); } else if (!skill.type) { console.error(`Validation Error: Skill "${skillId}" is missing 'type' property.`); isValid = false; } if (typeof skill.iconUnicode !== 'string' || skill.iconUnicode.trim() === '') { console.error(`Validation Error: Skill "${skillId}" has invalid or missing 'iconUnicode'.`); isValid = false; } if (typeof skill.link !== 'string') { console.error(`Validation Error: Skill "${skillId}" has invalid or missing 'link' property (must be a string).`); isValid = false; } });
+      if (isValid) { skills.forEach(skill => { if (skill.connections && Array.isArray(skill.connections)) { skill.connections.forEach(sourceId => { if (!encounteredIds.has(sourceId)) { console.error(`Validation Error: Skill "${skill.id}" has a connection from non-existent source ID "${sourceId}".`); isValid = false; } }); } else if (skill.connections && !Array.isArray(skill.connections)) { console.error(`Validation Error: Skill "${skill.id}" has an invalid 'connections' property (must be array).`); isValid = false; } }); } return isValid;
+    }
+
+    // --- Theme Handling Functions ---
+    function getThemePreference() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) return savedTheme;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'alt'; // Map OS Light -> Alt
+      return 'dark';
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'alt' || theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('theme');
+      }
+    }
+
+    function updateJsColorsFromCss() {
+      try {
+        const computedStyle = getComputedStyle(document.documentElement);
+        const readVar = (varName, isColor = false, isString = false, fallback = null) => {
+          const value = computedStyle.getPropertyValue(varName)?.trim();
+          if (!value) { console.error(`CSS variable ${varName} not found or empty.`); return fallback; }
+          if (isString) return value;
+          if (isColor) { try { return new THREE.Color(value); } catch (e) { console.error(`Error parsing ${varName} ('${value}') as THREE.Color:`, e); return fallback || new THREE.Color(0xff00ff); } }
+          else { try { if (!value.startsWith('#')) throw new Error("Not hex"); const hex = parseInt(value.substring(1), 16); if (isNaN(hex)) throw new Error("NaN"); return hex; } catch (e) { console.error(`Error parsing ${varName} ('${value}') as Hex:`, e); return fallback || 0xff00ff; } }
+        };
+        currentBgColor = readVar('--c-bg', true, false, new THREE.Color(0x1a1a1a));
+        currentLineColor = readVar('--c-line', true, false, new THREE.Color(0x666666));
+        currentIconColorActiveStr = readVar('--c-skill-icon-active', false, true, '#ff00ff');
+        currentIconColorPassiveStr = readVar('--c-skill-icon-passive', false, true, '#ff00ff');
+        currentIconColorHoverStr = readVar('--c-skill-icon-hover', false, true, '#ff00ff');
+        currentSkillBgHex = readVar('--c-skill-bg', false, false, 0xffffff);
+        currentBgHoverHex = readVar('--c-skill-bg-hover', false, false, 0xeeeeee);
+        if (scene) scene.background = currentBgColor;
+      } catch (e) { console.error("Error reading CSS variables:", e); }
+    }
+
+    function updateAllVisualsAfterThemeChange() {
+      updateJsColorsFromCss();
+      skillObjects.forEach(group => { applySkillStyle(group, group === previouslyHoveredGroup ? 'hover' : 'base'); });
+      drawConnections();
+    }
+
+    function handleThemeToggleClick() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || getThemePreference();
+      const newTheme = currentTheme === 'dark' ? 'alt' : 'dark'; // Toggle between dark and alt
+      applyTheme(newTheme);
+      updateAllVisualsAfterThemeChange();
+    }
+
+    // --- Initialization ---
+    async function init() {
+      containerElement = document.getElementById('container');
+      tooltipElement = document.getElementById('tooltip');
+      themeToggleButton = document.getElementById('theme-toggle');
+      if (!containerElement) { console.error("Fatal Error: #container not found."); document.body.innerHTML = '<div style="padding: 20px; color: red;">Error: Missing #container.</div>'; return; }
+      if (!tooltipElement) { console.warn("Warning: #tooltip not found."); }
+      if (!themeToggleButton) { console.warn("Warning: #theme-toggle button not found."); }
+
+      const initialTheme = getThemePreference();
+      applyTheme(initialTheme);
+      updateJsColorsFromCss();
+
+      scene = new THREE.Scene();
+      scene.background = currentBgColor;
+      const aspect = containerElement.clientWidth / containerElement.clientHeight;
+      camera = new THREE.OrthographicCamera(BASE_FRUSTUM_SIZE * aspect / -2, BASE_FRUSTUM_SIZE * aspect / 2, BASE_FRUSTUM_SIZE / 2, BASE_FRUSTUM_SIZE / -2, 1, 2000);
+      camera.position.z = CAMERA_DISTANCE;
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(containerElement.clientWidth, containerElement.clientHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      containerElement.appendChild(renderer.domElement);
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableRotate = false; controls.enablePan = true; controls.enableZoom = true;
+      controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: null };
+      controls.addEventListener('change', handleCameraChange);
+      raycaster = new THREE.Raycaster(); mouse = new THREE.Vector2();
+      if (tooltipElement) tooltipElement.style.display = 'none';
+
+      try { await Promise.all([ document.fonts.load('900 1em "Font Awesome 6 Free"').then(() => { fontAwesomeLoaded = true; }), document.fonts.load('1em "Jost"').then(() => { googleFontLoaded = true; }) ]); } catch (err) { console.error('Font loading error:', err); }
+
+      onWindowResize();
+
+      const isDataValid = validateSkillsData(skillsData, sectionLayout);
+      if (!isDataValid) { console.error("Data validation failed."); displayFontError("Error: Invalid skill data."); return; }
+
+      if (fontAwesomeLoaded && isDataValid) {
+        await loadSkillsAndTitles();
+        drawConnections();
+        handleCameraChange();
+      } else if (!fontAwesomeLoaded) { displayFontError("Error: Icons failed to load."); }
+
+      window.addEventListener('resize', onWindowResize, false);
+      if (containerElement) { containerElement.addEventListener('mousemove', onMouseMove, false); containerElement.addEventListener('mouseleave', onMouseLeave, false); containerElement.addEventListener('click', onClick, false); }
+      if (themeToggleButton) { themeToggleButton.addEventListener('click', handleThemeToggleClick); }
+
+      animate();
+    }
+
+    // --- Error Display Function ---
+    function displayFontError(message) { let errorMsg = document.getElementById('fontError'); if (!errorMsg) { errorMsg = document.createElement('div'); errorMsg.id = 'fontError'; errorMsg.style.cssText = 'color: var(--c-error-text); background: var(--c-error-bg); position: absolute; top: 10px; left: 50%; transform: translateX(-50%); padding: 8px 15px; border-radius: 5px; z-index: 100; text-align: center; font-family: Jost, sans-serif;'; document.body.prepend(errorMsg); } errorMsg.textContent = message; }
+
+    // --- Icon Texture Generation ---
+    function createIconTexture(unicodeChar, size, iconColor, bgColor) {
+      const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size; const ctx = canvas.getContext('2d'); if (bgColor) { ctx.fillStyle = bgColor; ctx.fillRect(0, 0, size, size); } ctx.font = `900 ${size * 0.7}px "Font Awesome 6 Free"`; ctx.fillStyle = iconColor; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(unicodeChar, size / 2, size / 2 + size*0.05); const texture = new THREE.CanvasTexture(canvas); texture.needsUpdate = true; return texture;
+    }
+
+    // --- Load Skills and Titles ---
+    async function loadSkillsAndTitles() {
+      const backgroundGeometry = new THREE.PlaneGeometry(SKILL_SIZE, SKILL_SIZE); const skillsBySection = {}; skillsData.forEach(skill => { if (!skillsBySection[skill.section]) { skillsBySection[skill.section] = []; } skillsBySection[skill.section].push(skill); });
+      for (const sectionName in sectionLayout) { const section = sectionLayout[sectionName]; const skills = skillsBySection[sectionName] || []; const sectionBaseY = section.baseY; const titleElement = document.createElement('div'); titleElement.className = 'section-title'; titleElement.textContent = section.title; if(containerElement) containerElement.appendChild(titleElement); sectionTitleElements[sectionName] = titleElement;
+        skills.forEach((skill) => { const group = new THREE.Group(); const skillY = sectionBaseY + (skill.pos.y || 0) * VERTICAL_SPACING_WITHIN_SECTION; group.position.set(skill.pos.x * GRID_SPACING_X, skillY, 0); const backgroundMaterial = new THREE.MeshBasicMaterial({ color: currentSkillBgHex }); const backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial); group.add(backgroundMesh); const initialIconColor = skill.type === 'active' ? currentIconColorActiveStr : currentIconColorPassiveStr; const iconTexture = createIconTexture(skill.iconUnicode, ICON_TEXTURE_SIZE, initialIconColor, 'transparent'); const iconMaterial = new THREE.SpriteMaterial({ map: iconTexture, color: 0xffffff, transparent: true, depthTest: false, depthWrite: false }); const iconSprite = new THREE.Sprite(iconMaterial); iconSprite.scale.set(SKILL_SIZE * 0.8, SKILL_SIZE * 0.8, 1); iconSprite.position.z = 0.1; group.add(iconSprite); group.userData = { ...skill, backgroundMesh, iconSprite }; scene.add(group); skillObjects.set(skill.id, group); });
+      }
+    }
+
+    // --- Draw Connection Lines ---
+    function drawConnections() {
+      if (!scene) return; lineObjects.forEach(line => scene.remove(line)); lineObjects.length = 0;
+      lineMaterial = new THREE.LineBasicMaterial({ color: currentLineColor, linewidth: 2, transparent: true, opacity: 0.7 });
+      skillsData.forEach(skill => { if (skill.connections && skill.connections.length > 0) { const targetGroup = skillObjects.get(skill.id); if (!targetGroup) return; skill.connections.forEach(sourceId => { const sourceGroup = skillObjects.get(sourceId); if (sourceGroup) { const points = [ sourceGroup.position.clone(), targetGroup.position.clone() ]; points[0].z -= 0.01; points[1].z -= 0.01; const geometry = new THREE.BufferGeometry().setFromPoints(points); const line = new THREE.Line(geometry, lineMaterial); scene.add(line); lineObjects.push(line); } else { console.warn(`Conn source id "${sourceId}" not found for target "${skill.id}".`); } }); } });
+    }
+
+    // --- Update Element Style (Position + Scale) ---
+    function updateElementStyle(element, targetPosition3D) {
+      if (!camera || !element || !containerElement) return; const vector = targetPosition3D.clone(); const cameraDirection = new THREE.Vector3(); camera.getWorldDirection(cameraDirection); const cameraToPoint = new THREE.Vector3().subVectors(vector, camera.position); const isBehind = cameraDirection.dot(cameraToPoint) < 0; if (isBehind) { element.style.display = 'none'; return; } else { element.style.display = ''; } vector.project(camera); const x = (vector.x * 0.5 + 0.5) * containerElement.clientWidth; const y = (-vector.y * 0.5 + 0.5) * containerElement.clientHeight; element.style.left = `${x}px`; element.style.top = `${y}px`; const scale = Math.max(0.4, Math.min(2.0, camera.zoom)); element.style.transform = `translateX(-50%) translateY(-50%) scale(${scale})`;
+    }
+
+    // --- Handler for Camera Change Event ---
+    function handleCameraChange() {
+      if (!camera) return;
+       for (const sectionName in sectionTitleElements) {
+         const titleElement = sectionTitleElements[sectionName]; if (!titleElement) continue;
+         const sectionData = sectionLayout[sectionName]; if (!sectionData) continue;
+         const sectionBaseY = sectionData.baseY;
+         updateElementStyle(titleElement, new THREE.Vector3(0, sectionBaseY + GRID_SPACING_Y_TITLE_OFFSET, 0));
+       }
+    }
+
+    // --- Apply Visual Style ---
+    function applySkillStyle(group, styleType) {
+      if (!group || !group.userData || !group.userData.backgroundMesh || !group.userData.iconSprite || !group.userData.iconUnicode || !group.userData.type) { console.error("Apply style skip: invalid group:", group?.userData?.id); return; }
+      const isHover = styleType === 'hover';
+      let iconColorStr; let bgColorHex; let scale;
+
+      if (isHover) {
+        iconColorStr = currentIconColorHoverStr;
+        bgColorHex = currentBgHoverHex;
+        scale = 1.1;
+      } else {
+        iconColorStr = group.userData.type === 'active' ? currentIconColorActiveStr : currentIconColorPassiveStr;
+        bgColorHex = currentSkillBgHex;
+        scale = 1.0;
+      }
+
+      if (typeof bgColorHex === 'number' && !isNaN(bgColorHex)) { group.userData.backgroundMesh.material.color.setHex(bgColorHex); }
+      else { console.warn(`Invalid background color for skill ${group.userData.id}:`, bgColorHex); group.userData.backgroundMesh.material.color.setHex(0xff00ff); }
+
+      if (typeof iconColorStr === 'string' && iconColorStr) {
+        const newIconTexture = createIconTexture(group.userData.iconUnicode, ICON_TEXTURE_SIZE, iconColorStr, 'transparent'); const oldTexture = group.userData.iconSprite.material.map; group.userData.iconSprite.material.map = newIconTexture; group.userData.iconSprite.material.needsUpdate = true; if (oldTexture && oldTexture !== newIconTexture) { oldTexture.dispose(); }
+      } else { console.warn(`Invalid icon color string for skill ${group.userData.id}:`, iconColorStr); }
+
+      group.scale.set(scale, scale, scale);
+    }
+
+    // --- Interaction Logic ---
+    function onMouseMove(event) {
+      if (!containerElement || !camera || !raycaster) return; const rect = containerElement.getBoundingClientRect(); mouse.x = ((event.clientX - rect.left) / containerElement.clientWidth) * 2 - 1; mouse.y = -((event.clientY - rect.top) / containerElement.clientHeight) * 2 + 1; raycaster.setFromCamera(mouse, camera); const intersects = raycaster.intersectObjects(scene.children, true); let currentHoveredGroup = null;
+      for (const intersect of intersects) { let object = intersect.object; while (object.parent && !(object.userData && object.userData.id)) { object = object.parent; } if (object.userData && object.userData.id) { currentHoveredGroup = object; break; } }
+      if (currentHoveredGroup !== previouslyHoveredGroup) { if (previouslyHoveredGroup) { applySkillStyle(previouslyHoveredGroup, 'base'); } if (currentHoveredGroup) { applySkillStyle(currentHoveredGroup, 'hover'); } previouslyHoveredGroup = currentHoveredGroup; }
+      if(containerElement) { containerElement.style.cursor = currentHoveredGroup ? 'pointer' : 'grab'; }
+      if (tooltipElement) { if (currentHoveredGroup) { const hoveredSkill = currentHoveredGroup.userData; tooltipElement.style.display = 'block'; tooltipElement.style.left = `${event.clientX - rect.left + 15}px`; tooltipElement.style.top = `${event.clientY - rect.top + 15}px`; const typeColorStr = hoveredSkill.type === 'active' ? currentIconColorActiveStr : currentIconColorPassiveStr; tooltipElement.innerHTML = `<h3>${hoveredSkill.name}</h3> <div class="skill-type" style="color: ${typeColorStr};">${hoveredSkill.type.charAt(0).toUpperCase() + hoveredSkill.type.slice(1)} Skill / Trait</div> <p>${hoveredSkill.description}</p> ${hoveredSkill.connections && hoveredSkill.connections.length > 0 ? `<p>Connects from: ${hoveredSkill.connections.map(id => skillsData.find(s=>s.id===id)?.name || id).join(', ')}</p>` : '' }`; } else { tooltipElement.style.display = 'none'; } }
+    }
+    function onMouseLeave(event) {
+      if (tooltipElement) tooltipElement.style.display = 'none'; if (previouslyHoveredGroup) { applySkillStyle(previouslyHoveredGroup, 'base'); previouslyHoveredGroup = null; } if(containerElement) { containerElement.style.cursor = 'grab'; }
+    }
+    function onClick(event) {
+      if (!containerElement || !camera || !raycaster) return; const rect = containerElement.getBoundingClientRect(); mouse.x = ((event.clientX - rect.left) / containerElement.clientWidth) * 2 - 1; mouse.y = -((event.clientY - rect.top) / containerElement.clientHeight) * 2 + 1; raycaster.setFromCamera(mouse, camera); const intersects = raycaster.intersectObjects(scene.children, true); let clickedSkillGroup = null;
+      for (const intersect of intersects) { let object = intersect.object; while (object.parent && !(object.userData && object.userData.id)) { object = object.parent; } if (object.userData && object.userData.id) { clickedSkillGroup = object; break; } }
+      if (clickedSkillGroup) { const clickedSkillData = clickedSkillGroup.userData; if (clickedSkillData.link && typeof clickedSkillData.link === 'string' && clickedSkillData.link !== '#') { window.open(clickedSkillData.link, '_blank'); } else if (clickedSkillData.link !== '#') { console.warn(`Skill "${clickedSkillData.id}" clicked, no valid link.`); } }
+    }
+
+    // --- Responsiveness ---
+    function onWindowResize() {
+      if (!containerElement || !camera || !renderer) return; const width = containerElement.clientWidth; const height = containerElement.clientHeight; const aspect = width / height;
+      camera.left = BASE_FRUSTUM_SIZE * aspect / -2; camera.right = BASE_FRUSTUM_SIZE * aspect / 2; camera.top = BASE_FRUSTUM_SIZE / 2; camera.bottom = BASE_FRUSTUM_SIZE / -2; camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      handleCameraChange();
+    }
+
+    // --- Animation Loop ---
+    function animate() {
+      if (renderer && scene && camera && controls) { requestAnimationFrame(animate); renderer.render(scene, camera); }
+    }
+
+    // --- Start ---
+    init();
+
+  </script>
+</body>
+</html>
